@@ -12,7 +12,7 @@ This repository provides the code for the manuscript "Difference-in-differences 
 
 ## Simulation
 
-In order to re-create the simulation results found in the manuscript, run the following files in order. Note that these files are meant to run on a computing cluster rather than a personal computer. In particular, `simulation.R` may be submitted with a job array to a computing cluster where each job corresponds to analyzing one simulated dataset. We have found that 5gb of memory and 20 minutes per job was sufficient. All R code files are found in `/code/`. The simulation with multiple time periods follows a similar structure where the relevant files are suffixed with "mtp", e.g., `sims_gen_mtp.R` generates the datasets for the multiple time periods simulation experiment. Parts of these code files are adapted from the code corresponding with [Schindl et al. (2026)](http://arxiv.org/abs/2409.11967) [2] and [Callaway and Sant'Anna (2021)](https://doi.org/10.1016/j.jeconom.2020.12.001) [3]. 
+In order to re-create the simulation results found in the manuscript, run the files in the below list in order. Note that these files are meant to run on a computing cluster rather than a personal computer. In particular, `simulation.R` may be submitted with a job array to a computing cluster where each job corresponds to analyzing one simulated dataset. We have found that 5gb of memory and 20 minutes per job was sufficient. All R code files are found in `/code/`. The simulation with multiple time periods follows a similar structure where the relevant files are suffixed with "mtp", e.g., `sims_gen_mtp.R` generates the datasets for the multiple time periods simulation experiment. Parts of these code files are adapted from the code corresponding with [Schindl et al. (2026)](http://arxiv.org/abs/2409.11967) [2] and [Callaway and Sant'Anna (2021)](https://doi.org/10.1016/j.jeconom.2020.12.001) [3]. 
 
 1. `sims_gen.R`: creates the simulated datasets.
 2. `simulation.R`: estimates the target parameter in each simulated dataset. 
@@ -35,7 +35,11 @@ Other files:
 
 ## Data application
 
-Make sure the data is downloaded from [2] and placed in the appropriate directory. Then, `fracking.R` is run to compute the analysis. Similar to the simulation, this file is meant to be run on a computing cluster with a job array passed in corresponding to a different "case", which defines the target parameter. Then, `fracking_eval.R` evaluates the results from `fracking.R`. 
+Make sure the data is downloaded from [2] and placed in the appropriate directory (`data/fracking/`). In particular, the files `county_clean_long.dta`, `county_flat.dta`, and `hdpi_allwells_shale.dta` are used. In order to re-create the results of the paper, run the files in the below list in order. The file `fracking_desc.R` performs data cleaning, data exploration, and saves the dataset used in the analysis. Then, `fracking.R` is run to compute the analysis. Similar to the simulation, this file is meant to be run on a computing cluster with a job array passed in corresponding to a different "case", which defines the target parameter. Then, `fracking_eval.R` evaluates the results from `fracking.R`. 
+
+1. `fracking_desc.R`: data cleaning and data exploration.
+2. `fracking.R`: performs the main analysis.
+3. `fracking_eval.R`: aggregates and evaluates results from `fracking.R`.
 
 ## References
 
