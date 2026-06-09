@@ -174,36 +174,3 @@ for (nuisance in c('glm', 'bart', 'oracle')) {
 
 # save results for aggregated parameters
 saveRDS(results.all.agg, save_string_agg)
-
-
-
-
-
-
-
-# truth_file_path <- here("results", "sims", paste0("asdt_mtp_true_sc", scenario, ".rds"))
-# asdt_true = readRDS(truth_file_path)
-# results.df = results.df %>% left_join(asdt_true, by=c('g','t','e','delta'))
-# ggplot(results.df %>% filter(abs(delta) <= 10, nuisance=='oracle'), 
-#        aes(x=delta, group=sim)) +
-#   geom_line(aes(y=psihat), color = 'grey') +
-#   geom_line(aes(y=asdt), color = 'red') +
-#   geom_ribbon(aes(ymin=ci_lower, ymax=ci_upper), alpha=0.1) +
-#   facet_grid(rows = vars(e), cols = vars(g))
-
-
-
-
-# Y_t = cs$Y_t
-# Y_g1 = cs$Y_g1
-# treat = cs$treat
-# G = cs$G
-# x = cs$x
-# stochastic_policy = 'exp_tilt'
-# policy_params = list('delta' = delta_vals)
-# nuisance_estimator = nuisance_estimator
-# g = g
-# t = t
-# T_periods = T_periods
-# K = cf_folds
-# design_d = seq(0.001, 0.999, length.out = 500)
