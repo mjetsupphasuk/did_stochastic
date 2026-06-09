@@ -334,7 +334,7 @@
       "VignetteBuilder": "knitr",
       "Author": "Tobias Sing [aut], Oliver Sander [aut], Niko Beerenwinkel [aut], Thomas Lengauer [aut], Thomas Unterthiner [ctb], Felix G.M. Ernst [cre] (ORCID: <https://orcid.org/0000-0001-5064-0928>)",
       "Maintainer": "Felix G.M. Ernst <felix.gm.ernst@outlook.com>",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/rhel9/latest"
+      "Repository": "CRAN"
     },
     "Rcpp": {
       "Package": "Rcpp",
