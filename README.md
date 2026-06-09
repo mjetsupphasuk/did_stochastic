@@ -8,7 +8,7 @@ This Github repo contains the code and materials to re-create the results presen
 
 `/code/`: contains the R scripts used for analysis and the data application.
 
-`/data/`: contains simulation data (created by files in `/code/`) and the data for the main data application (see [2] to obtain the data).
+`/data/`: contains simulation data (created by files in `/code/`) and the data for the main data application (see [Bartik et al.](http://doi.org/10.1257/app.20170487) [4] to obtain the data).
 
 `/results/`: results from the simulation and data application are stored here.
 
@@ -37,7 +37,7 @@ Other files:
 
 ## Data application
 
-Make sure the data is downloaded from Bartik et al. [4]\ (http://doi.org/10.1257/app.20170487) and placed in the appropriate directory (`data/fracking/`). In particular, the files `county_clean_long.dta`, `county_flat.dta`, and `hdpi_allwells_shale.dta` are used. In order to re-create the results of the paper, run the files in the below list in order. The file `fracking_desc.R` performs data cleaning, data exploration, and saves the dataset used in the analysis. Then, `fracking.R` is run to compute the analysis. Similar to the simulation, this file is meant to be run on a computing cluster with a job array passed in corresponding to a different "case", which defines the target parameter. Then, `fracking_eval.R` evaluates the results from `fracking.R`. 
+Make sure the data is downloaded from Bartik et al. [4]  (http://doi.org/10.1257/app.20170487) and placed in the appropriate directory (`data/fracking/`). In particular, the files `county_clean_long.dta`, `county_flat.dta`, and `hdpi_allwells_shale.dta` are used. In order to re-create the results of the paper, run the files in the below list in order. The file `fracking_desc.R` performs data cleaning, data exploration, and saves the dataset used in the analysis. Then, `fracking.R` is run to compute the analysis. Similar to the simulation, this file is meant to be run on a computing cluster with a job array passed in corresponding to a different "case", which defines the target parameter. Then, `fracking_eval.R` evaluates the results from `fracking.R`. 
 
 1. `fracking_desc.R`: data cleaning and data exploration. This file calls in data from the US Census / ACS. Near the top, replace "INSERT YOUR KEY HERE" with your personal Census API key. You may request a key [here](https://api.census.gov/data/key_signup.html): https://api.census.gov/data/key_signup.html. 
 2. `fracking.R`: performs the main analysis.
