@@ -1,8 +1,4 @@
 
-# set directories
-setwd("/work/users/m/j/mjets/dissertation/paper2")
-.libPaths("/nas/longleaf/home/mjets/RLibs")
-
 # load libraries
 library(here)
 library(tidyverse)
@@ -79,7 +75,7 @@ for (nuisance_estimator in unique(results.all$nuisance2)) {
     geom_line(mapping = aes(x=delta, y=psihat_avg), inherit.aes=FALSE, color='blue', linetype='dashed') +
     facet_grid(rows = vars(e_label), cols = vars(g_label)) +
     labs(
-      title = "Disaggregated ASDT Estimates",
+      title = "Disaggregation Estimates",
       subtitle = paste("Scenario", scenario, "| Estimator:", nuisance_estimator),
       x = expression(delta), y = 'ASDT'
     ) +
@@ -194,12 +190,14 @@ agg_results.all = agg_results.all %>%
 
 # nicer nuisance names and type/target names
 # also change "simple" to "overall"
+# and "group" to "cohort"
 agg_results.all = agg_results.all %>%
   mutate(nuisance2 = case_when(nuisance=='bart' ~ 'BART',
                                nuisance=='glm' ~ 'GLMs',
                                nuisance=='oracle' ~ 'Oracle'),
          type = ifelse(type=='simple', 'overall', type),
-         type2 = gsub('_', ' ', type) %>% str_to_title())
+         type2 = gsub('_', ' ', type) %>% str_to_title(),
+         type2 = ifelse(type2=='Group', 'Cohort', type2))
 
 
 # cycle through and process each type of aggregation
@@ -226,9 +224,8 @@ for (atype in agg_types) {
                 color = "steelblue", linewidth = 1.2, linetype = "dashed") +
       facet_grid(. ~ target) +
       labs(
-        title = paste("Aggregated ASDT:", atype),
-        subtitle = paste("Scenario", scenario, "| Estimator:", nuisance_estimator, 
-                         "\nGray: Sims | Red: True | Blue Dashed: Mean Est"),
+        title = paste("Aggregation:", atype),
+        subtitle = paste("Scenario", scenario, "| Estimator:", nuisance_estimator),
         x = expression(delta), y = paste("ASDT", atype)
       ) +
       theme(strip.background = element_rect(fill = "gray90"))
@@ -236,7 +233,7 @@ for (atype in agg_types) {
     ggsave(here('results', 'sims', 
                 paste0('result_plot_mtp-agg_', atype, '_sc', scenario, '_cfK', cf_folds, '_', nuisance_estimator, '.png')),
            plot = p_est,
-           width=10, height=8, units='in')
+           width=6, height=4.5, units='in')
   
   }
   
@@ -260,18 +257,18 @@ for (atype in agg_types) {
       facet_grid(. ~ target) +
       scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1)) +
       labs(
-        title = paste("Wald CI Coverage:", atype),
+        title = paste("Coverage:", atype),
         subtitle = paste("Scenario", scenario, "| Estimator:", nuisance_estimator),
         x = expression(delta), y = "Coverage Rate"
       ) +
       theme(strip.background = element_rect(fill = "gray90"))
     
-    print(p_cov)
+    # print(p_cov)
     
     ggsave(here('results', 'sims',
                 paste0('result_coverage_mtp-agg_', atype, '_sc', scenario, '_cfK', cf_folds, '_', nuisance_estimator, '.png')),
            plot = p_cov,
-           width=10, height=8, units='in')
+           width=6, height=4.5, units='in')
   }
 }
 

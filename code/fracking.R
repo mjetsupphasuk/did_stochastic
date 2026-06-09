@@ -1,7 +1,4 @@
 
-setwd("/work/users/m/j/mjets/dissertation/paper2")
-.libPaths("/nas/longleaf/home/mjets/RLibs")
-
 library(haven)
 library(readr)
 library(BART)
@@ -11,11 +8,13 @@ library(caret)
 library(tidycensus)
 library(tigris)
 library(viridis)
+library(here)
 library(tidyverse)
 
 theme_set(theme_bw(base_size = 14))
 
-source('code/utils.R')
+# import functions
+source(here('code', 'utils.R'))
 
 # collect arguments passed in from job array
 args = commandArgs(trailingOnly=TRUE)
@@ -43,10 +42,10 @@ set.seed(892385 + case)
 # Data --------------------------------------------------------------------
 
 # load cleaned data
-data_analysis = readRDS('data/fracking/data_analysis.rds')
+data_analysis = readRDS(here('data', 'fracking', 'data_analysis.rds'))
 
 # load demo data
-demo = readRDS('data/fracking/demo.rds')
+demo = readRDS(here('data', 'fracking', 'demo.rds'))
 
 # subset units to treated and not-yet-treated
 # for negative event times (i.e., pre-tests), define treated and untreated groups at exp_year
@@ -106,12 +105,12 @@ estimates = estimate_psi(deltay, treat, x,
                          nuisance_estimator = nuisance_estimator)
 
 # save results
-saveRDS(estimates, paste0('results/fracking/',
-                          'treat', gsub('_shale', '', which_treat), '_',
-                          nuisance_estimator, '_',
-                          'cfK', cf_folds, '_',
-                          gsub('_', '', y_name), '_', 
-                          'refyear', ref_year,
-                          '_lag', gsub('-', 'neg', event_time),
-                          '.rds'))
+saveRDS(estimates, here('results', 'fracking',
+                        paste0('treat', gsub('_shale', '', which_treat), '_',
+                               nuisance_estimator, '_',
+                               'cfK', cf_folds, '_',
+                               gsub('_', '', y_name), '_', 
+                               'refyear', ref_year,
+                               '_lag', gsub('-', 'neg', event_time),
+                               '.rds')))
 

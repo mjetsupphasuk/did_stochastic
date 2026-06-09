@@ -1,7 +1,4 @@
 
-setwd("/work/users/m/j/mjets/dissertation/paper2")
-.libPaths("/nas/longleaf/home/mjets/RLibs")
-
 library(haven)
 library(readr)
 library(BART)
@@ -9,11 +6,13 @@ library(hal9001)
 library(SuperLearner)
 library(caret)
 library(tidycensus)
+library(here)
 library(tidyverse)
 
 theme_set(theme_bw(base_size = 16))
 
-source('code/utils.R')
+# import functions
+source(here('code', 'utils.R'))
 
 # all cases
 # note that treatment initiation is always defined as ref_year + 1
@@ -47,14 +46,14 @@ for (case in 1:nrow(cases)) {
   which_treat = cases$which_treat[case]
 
   # read results
-  estimates = readRDS(paste0('results/fracking/',
-                             'treat', gsub('_shale', '', which_treat), '_',
+  estimates = readRDS(here('results', 'fracking',
+                             paste0('treat', gsub('_shale', '', which_treat), '_',
                              nuisance_estimator, '_',
                              'cfK', cf_folds, '_',
                              gsub('_', '', y_name), '_', 
                              'refyear', ref_year,
                              '_lag', gsub('-', 'neg', event_time),
-                             '.rds'))
+                             '.rds')))
 
   # format results
   results = data.frame(delta = delta_vals,
@@ -112,12 +111,12 @@ results.tmp = results.all.df %>%
 ylims = c(-0.07, 0.13)
 
 myplot(results.tmp, ylims=ylims)
-ggsave(paste0('results/fracking/plots/main/',
-              'treatwithin_',
+ggsave(here('results', 'fracking', 'main',
+              paste0('treatwithin_',
               nuisance_estimator, '_',
               'cfK', cf_folds, '_',
               'emptot',
-              '.png'),
+              '.png')),
        width=7, height=4.5, units='in', scale=1.4)
 
 
@@ -128,12 +127,12 @@ results.tmp = results.all.df %>%
          which_treat == 'within_shale')
 
 myplot(results.tmp)
-ggsave(paste0('results/fracking/plots/main/',
-              'treatwithin_',
+ggsave(here('results', 'fracking', 'main',
+              paste0('treatwithin_',
               nuisance_estimator, '_',
               'cfK', cf_folds, '_',
               'rincometot',
-              '.png'),
+              '.png')),
        width=7, height=4.5, units='in', scale=1.4)
 
 
@@ -150,14 +149,14 @@ ggplot(results.tmp %>% filter(abs(delta) <= 10),
   geom_line() +
   geom_ribbon(alpha = 0, color = 'black', linetype = 'dashed') +
   labs(x = 'δ', y = 'Average stochastic dose effect among the treated')
-ggsave(paste0('results/fracking/plots/main/',
-              'treatwithin_',
+ggsave(here('results', 'fracking', 'main',
+              paste0('treatwithin_',
               nuisance_estimator, '_',
               'cfK', cf_folds, '_',
               'emptot_',
               'g2008_',
               'e3',
-              '.png'),
+              '.png')),
        width=7, height=4.5, units='in', scale=1.4)
 
 
@@ -190,14 +189,14 @@ for (case in 1:nrow(cases)) {
   which_treat = cases$which_treat[case]
   
   # read results
-  estimates = readRDS(paste0('results/fracking/',
-                             'treat', gsub('_shale', '', which_treat), '_',
+  estimates = readRDS(here('results', 'fracking',
+                             paste0('treat', gsub('_shale', '', which_treat), '_',
                              nuisance_estimator, '_',
                              'cfK', cf_folds, '_',
                              gsub('_', '', y_name), '_', 
                              'refyear', ref_year,
                              '_lag', gsub('-', 'neg', event_time),
-                             '_gauss.rds'))
+                             '_gauss.rds')))
   
   # format results
   results = data.frame(delta = delta_vals,
@@ -254,12 +253,12 @@ ggplot(data.tmp2,
   facet_grid(rows = vars(exp_year_char), cols = vars(delta_plot)) +
   labs(x = "Time", y = 'Average stochastic dose effect among the treated') +
   theme(panel.grid.minor = element_blank())
-ggsave(paste0('results/fracking/plots/main/', 
-              'treatwithin_',
+ggsave(here('results', 'fracking', 'main', 
+              paste0('treatwithin_',
               nuisance_estimator, '_',
               'cfK', cf_folds, '_',
               'emptot', 
-              '_gauss.png'),
+              '_gauss.png')),
        width=7, height=4.5, units='in', scale=1.4)
 
 
@@ -270,10 +269,3 @@ ggplot(data.tmp %>% filter(delta > 0.5, exp_year==2008, event_time==3),
   geom_hline(yintercept=0, linetype='dashed') +
   labs(x = "Concentration point d'", y = 'Average stochastic dose effect among the treated') +
   theme(panel.grid.minor = element_blank())
-# ggsave(paste0('results/fracking/plots/main/', 
-#               'treatwithin_',
-#               nuisance_estimator, '_',
-#               'cfK', cf_folds, '_',
-#               'emptot', 
-#               '_gauss.png'),
-#        width=7, height=4.5, units='in', scale=1.4)

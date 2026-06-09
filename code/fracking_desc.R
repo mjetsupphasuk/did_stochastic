@@ -1,7 +1,4 @@
 
-setwd("/work/users/m/j/mjets/dissertation/paper2")
-.libPaths("/nas/longleaf/home/mjets/RLibs")
-
 library(haven)
 library(readr)
 library(BART)
@@ -11,11 +8,13 @@ library(caret)
 library(tidycensus)
 library(tigris)
 library(viridis)
+library(here)
 library(tidyverse)
 
 theme_set(theme_bw(base_size = 14))
 
-source('code/utils.R')
+# import functions
+source(here('code', 'utils.R'))
 
 
 # Demographic data --------------------------------------------------------
@@ -54,9 +53,9 @@ saveRDS(demo, 'data/fracking/demo.rds')
 # Explore -----------------------------------------------------------------
 
 # read in data
-data = read_dta('data/fracking/county_clean_long.dta')
-data_flat = read_dta('data/fracking/county_flat.dta')
-hdpi = read_dta('data/fracking/hpdi_allwells_shale.dta')
+data = read_dta(here('data', 'fracking', 'county_clean_long.dta'))
+data_flat = read_dta(here('data', 'fracking', 'county_flat.dta'))
+hdpi = read_dta(here('data', 'fracking', 'hpdi_allwells_shale.dta'))
 
 # subset of data used in Callaway, Goodman-Bacon, Sant'Anna (CGS)
 data_cgs = data %>% filter(year >= 2001, year <= 2014)
@@ -93,7 +92,7 @@ sample_size = data_cgs %>%
             treated = sum(playyear1 == year & valScoreM1 > 0, na.rm=TRUE))
 
 # save sample size
-write_csv(sample_size, 'results/fracking/sample_size.csv')
+write_csv(sample_size, here('results', 'fracking', 'sample_size.csv'))
 
 
 # shale plays
@@ -112,7 +111,7 @@ data %>%
 # Process data ------------------------------------------------------------
 
 # read in data
-data = read_dta('data/fracking/county_clean_long.dta')
+data = read_dta(here('data', 'fracking', 'county_clean_long.dta'))
 
 # divide prospectivity score by max within each shale for comparability
 max_shale_prospect = data %>%
@@ -137,7 +136,7 @@ data = data %>%
   mutate(playyear1 = ifelse(valScoreM1==0, 2020, playyear1))
 
 # save data
-saveRDS(data, 'data/fracking/data_analysis.rds')
+saveRDS(data, here('data', 'fracking', 'data_analysis.rds'))
 
 
 
@@ -170,7 +169,7 @@ data.plot = left_join(counties_sf, data.plot, by=c('GEOID'='fips'))
 
 # plot and save
 plot_map(data.plot)
-ggsave('results/fracking/prospectivity_map_any.png')
+ggsave(here('results', 'fracking', 'prospectivity_map_any.png'))
 
 
 # data to plot - 2008
@@ -183,7 +182,7 @@ data.plot = left_join(counties_sf, data.plot, by=c('GEOID'='fips'))
 
 # plot and save
 plot_map(data.plot)
-ggsave('results/fracking/prospectivity_map_2008.png')
+ggsave(here('results', 'fracking', 'prospectivity_map_2008.png'))
 
 
 # also plot histogram
@@ -191,7 +190,7 @@ ggplot(data.plot %>% filter(!is.na(treat_shale)), aes(x=treat_shale)) +
   geom_histogram(fill='grey', binwidth=0.1) +
   labs(x = 'Prospectivity score (rescaled)', y = 'Number of counties') +
   theme(panel.grid = element_blank())
-ggsave('results/fracking/treatment_shale_hist.png', width=6, height=4.5, units='in')
+ggsave(here('results', 'fracking', 'treatment_shale_hist.png'), width=6, height=4.5, units='in')
 
 # data to plot - 2008
 data.plot = data %>% 
@@ -203,7 +202,7 @@ data.plot = left_join(counties_sf, data.plot, by=c('GEOID'='fips'))
 
 # plot and save
 plot_map(data.plot)
-ggsave('results/fracking/prospectivity_map_2009.png')
+ggsave(here('results', 'fracking', 'prospectivity_map_2009.png'))
 
 
 # Compare pre-treatment characteristics -----------------------------------
@@ -248,7 +247,7 @@ ggplot(data = data.plot, aes(fill = y)) +
         panel.border = element_blank(),
         legend.key.width = unit(30, 'pt')) +
   labs(x='', y='')
-ggsave('results/fracking/y_map_2008.png')
+ggsave(here('results', 'fracking', 'y_map_2008.png'))
 
 mean(datay$y)
 sd(datay$y)
@@ -286,7 +285,7 @@ ggplot(data = data.plot, aes(fill = deltay)) +
         panel.border = element_blank(),
         legend.key.width = unit(30, 'pt')) +
   labs(x='', y='')
-ggsave('results/fracking/deltay_map_2008.png')
+ggsave(here('results', 'fracking', 'deltay_map_2008.png'))
 
 
 
@@ -316,8 +315,8 @@ t.test(data_analysis$poverty[data_analysis$treat==0], data_analysis$poverty[data
 t.test(data_analysis$hhincome_med_log[data_analysis$treat==0], data_analysis$hhincome_med_log[data_analysis$treat > 0])
 
 # save
-write_csv(cov_means, paste0('results/fracking/cov_means_', exp_year, '.csv'))
-write_csv(cov_sds, paste0('results/fracking/cov_sds_', exp_year, '.csv'))
+write_csv(cov_means, here('results', 'fracking', paste0('cov_means_', exp_year, '.csv')))
+write_csv(cov_sds, here('results', 'fracking', paste0('cov_sds_', exp_year, '.csv')))
 
 
 

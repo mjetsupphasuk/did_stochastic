@@ -1,8 +1,4 @@
 
-# set directories
-setwd("/work/users/m/j/mjets/dissertation/paper2")
-.libPaths("/nas/longleaf/home/mjets/RLibs")
-
 # load libraries
 library(here)
 library(tidyverse)
